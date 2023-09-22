@@ -62,7 +62,7 @@ while True:
             if dis<25:
                 cv2.circle(img,(line_info[4],line_info[5]),15,(0,255,0),cv2.FILLED)
                 autopy.mouse.click()
-                time.sleep(0.5)
+                time.sleep(0.1)
                 #print(dis)
 
     #framerate
