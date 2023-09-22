@@ -9,19 +9,37 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import QCoreApplication
+import pyttsx3
+from db import Update,Read,establish_connection
 
+#setting of engine to taking voice 
+eng=pyttsx3.init('sapi5')          
+voices=eng.getProperty('voices')
+eng.setProperty('voices',voices[0].id)
+eng.setProperty('rate',170)              #speech rate in words per minute
 
 class Ui_MainWindow(object):
     
-    def setupUi(self, MainWindow):
+    def closeMain(self,win):
+        win.hide()
+
+    
+    def Speak(self,text):
+        self.audio=text
+        eng.say(self.audio)
+        print("")
+        eng.runAndWait() 
+
+    def setupUi(self, MainWindow,mob,PIN):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1214, 758)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-
-        self.flag=0
-        self.amount1=10000
-        self.pin1=1234
+        
+        self.mob=mob
+        self.PIN=PIN
+        self.flag=3
 
         self.msg = QtWidgets.QMessageBox()
         self.label = QtWidgets.QLabel(self.centralwidget)
@@ -200,17 +218,20 @@ class Ui_MainWindow(object):
         self.video.setStyleSheet("border:2px solid grey;")
         self.video.setText("")
         self.video.setObjectName("video")
-        self.c = QtWidgets.QPushButton(self.centralwidget)
-        self.c.setGeometry(QtCore.QRect(30, 640, 351, 81))
-        self.c.setStyleSheet("\n"
+
+        self.card = QtWidgets.QPushButton(self.centralwidget,clicked=lambda:self.closeMain(MainWindow))
+        self.card.setText("CLOSE")
+        self.card.setGeometry(QtCore.QRect(30, 640, 351, 81))
+
+        self.card.setStyleSheet("\n"
 "font: 28pt ;\n"
 "border-radius:10px;\n"
-"background-color:black;\n"
+"background-color:red;\n"
 "color:white;\n"
 "border:1px solid grey;")
-        self.c.setObjectName("c")
+        self.card.setObjectName("card")
         self.inputbox = QtWidgets.QTextBrowser(self.centralwidget)
-        self.inputbox.setGeometry(QtCore.QRect(340, 70, 521, 81))
+        self.inputbox.setGeometry(QtCore.QRect(340, 70, 520, 80))
         self.inputbox.setStyleSheet("background-color: qlineargradient(spread:pad, x1:0.124378, y1:0.119, x2:1, y2:1, stop:0.18408 rgba(0, 0, 0, 147), stop:0.850746 rgba(3, 0, 7, 255));\n"
 "font: 28pt \"MV Boli\";\n"
 "color: rgb(85, 255, 38);\n"
@@ -240,13 +261,19 @@ class Ui_MainWindow(object):
         self.Del.clicked.connect(self.DEL)
 
         self.changepin.clicked.connect(self.Changepin)
-        self.withdrawal.clicked.connect(self.Withdrawal)
+        self.withdrawal.clicked.connect(self.Withdrawal) 
 
         #self.c.clicked.connect(self.Card)
         self.proceed.clicked.connect(self.Proceed)
 
+        #self.card.clicked.connect(QCoreApplication.instance().quit)
+        #self.card.clicked.connect(self.exit)
+
         #Methods for each button===================================================
     
+    def quit(self):
+        self.exit()
+
     def Zero(self):
         self.inputbox.setText(self.inputbox.toPlainText()+"0")
     def One(self):
@@ -268,45 +295,73 @@ class Ui_MainWindow(object):
     def Nine(self):
         self.inputbox.setText(self.inputbox.toPlainText()+"9")
     
-
     def CLR(self):
         self.inputbox.setText("")
     def DEL(self):
-        if self.flag==0:
-                pass
+        self.inputbox.setText(self.inputbox.toPlainText()[:-1])
+
 
     def Changepin(self):
         self.textbox.setText("\t\tEnter The New Pin")
-        self.flag=1
+        self.Speak("Enter The New PIN")
+        self.flag=4
+
     def Withdrawal(self):
         self.flag=0
         self.textbox.setText("\t\tEnter The Amount")
+        self.Speak("Enter The Amount")
 
     def Proceed(self):
-        if self.flag==0:
+        if self.flag==0:                                #for withdrawal
                 if self.inputbox.toPlainText()!="":
                         self.amount=int(self.inputbox.toPlainText())
-                        if self.amount>self.amount1:
-                                print("You don't have enough balance in account")
-                                print("Your Balance:",self.amount1)
-                                self.messagebox("You don't have enough balance in account\nYour Balance:%s"%(self.amount1),2)
+                        print(self.mob)
+                        establish_connection()
+                        self.BALANCE = Read("select balance from customer where ph_no={}".format(self.mob))
+                        print(self.BALANCE)
+                        if self.BALANCE==None:
+                                print("TRY AGAIN!!")
+
+                        elif self.amount>int(self.BALANCE):
+                                self.Speak("No enough balance in account")
+                                self.messagebox("You don't have enough balance in account\nYOUR BALANCE:%s"%(self.BALANCE),2)
                                 self.flag=0
+                                
                         else:
                                 self.textbox.setText("\t\tEnter Your PIN")
                                 self.inputbox.setText("")
                                 self.flag=1
-        if self.flag==1:
+                                self.Speak("Enter Your PIN")
+                                self.flag=1
+        if self.flag==1:                                #for pin
                 if self.inputbox.toPlainText()!="":
                         self.pin=int(self.inputbox.toPlainText())
                         self.flag=2
                 
-        if self.flag==2:
-                if self.pin==self.pin1:
-                        self.amount1=self.amount1-self.amount
-                        print("you withdrawal Amount:",self.amount)
-                        self.messagebox("Required Amount has been generated\nTake the Money from Money Box",1)
+        if self.flag==2:                                #for cross verify the pin
+                if str(self.pin)==str(self.PIN):
+                        establish_connection()
+                        Update("update customer set balance=balance-{} where ph_no={}".format (self.amount,self.mob ))
+                        self.Speak("Transaction Successful !")
+                        self.messagebox("Withdrawal Amount:%s\nTake the Money from Money Box"%(self.amount),1)
+                        self.inputbox.setText("")
+                        self.flag=3
+                        self.textbox.setText("")
+
                 else:
+                        self.Speak("Incorrect PIN")
                         self.messagebox("Incorrect PIN",2)
+                        self.inputbox.setText("")
+                        self.flag=1
+
+        if self.flag==4:
+                if self.inputbox.toPlainText()!="":
+                        self.pin=int(self.inputbox.toPlainText())
+                        self.pin1=self.pin
+                        self.flag=3
+                        self.messagebox("PIN has been changed Successfully !",1)
+                        self.inputbox.setText("")
+                        
 
         
     def messagebox(self,message,type):              #type 1= information message / type 2 = warning message
@@ -367,7 +422,7 @@ class Ui_MainWindow(object):
         self.clr.setText(_translate("MainWindow", "CLR"))
         self.Del.setText(_translate("MainWindow", "DEL"))
         self.proceed.setText(_translate("MainWindow", "Proceed"))
-        self.c.setText(_translate("MainWindow", "Enter Your Card"))
+        self.card.setText(_translate("MainWindow", "CLOSE"))
         self.inputbox.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
