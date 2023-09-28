@@ -5,8 +5,8 @@ from db import Update,Read
 
 
 # Your Twilio Account SID and Auth Token
-account_sid = "ACd3d48576c3e99c34116f716f44e27a91"
-auth_token = "b1c0417c859ae876cbff7820dbb5927d"
+account_sid = "Enter your authh id"
+auth_token = "your token"
 
 def get_OTP(Mo_No):
     Mo_No="7057997137"
@@ -26,7 +26,7 @@ def get_OTP(Mo_No):
     try:
         message = client.messages.create(
         to=recipient_phone_number,
-        from_="+14055637844",  # Replace with your Twilio phone number
+        from_="##########",  # Replace with your Twilio phone number
         body=message_body
         )
         print(f"OTP sent to {recipient_phone_number}")
