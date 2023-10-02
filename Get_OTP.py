@@ -9,7 +9,6 @@ account_sid = "Enter your authh id"
 auth_token = "your token"
 
 def get_OTP(Mo_No):
-    Mo_No="0202020202"
     # Create a Twilio client
     client = Client(account_sid, auth_token)
 
