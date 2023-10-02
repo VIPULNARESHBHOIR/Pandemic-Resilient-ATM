@@ -1,0 +1,8 @@
+import mysql.connector
+import PyQt5
+import pyttsx3
+import twilio
+import mediapipe
+import opencv-python
+import autopy
+import numpy

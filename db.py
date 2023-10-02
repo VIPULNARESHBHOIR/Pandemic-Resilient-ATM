@@ -40,13 +40,20 @@ def Update(query):
 def Read(query):
     try:
         cursor.execute(query) 
-        ans=cursor.fetchone()
+        ans=cursor.fetchall()
         cursor.close()
         con.close()
         if ans:
-            print(ans[0])
-            return ans[0]
+            return ans
         else: 
             return 11
     except Exception as e:
         print(e)
+
+establish_connection()
+value='HDFC'
+no="7057997137"
+establish_connection()
+
+BALANCE = Read("SELECT balance FROM customer WHERE ph_no='{}' AND bank='{}'".format(no, value))
+print(BALANCE)

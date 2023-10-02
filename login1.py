@@ -11,6 +11,7 @@ from db import Update,Read,establish_connection
 from PyQt5 import QtCore, QtGui, QtWidgets
 from AtmGui import Ui_MainWindow
 from Get_OTP import get_OTP
+from Banks import AnimalChoiceWidget
 
 class Ui_Authentication(object):
 
@@ -19,10 +20,28 @@ class Ui_Authentication(object):
         self.OTP=str(self.otp_text.toPlainText())
         if self.OTP==self.otp:
                 #print("match Found")
+                self.choices=[]
+                establish_connection()
+                self.v = Read("select bank from customer where ph_no={}".format(self.mono))
+        
+                for row in self.v:
+                        self.choices.append(row[0])
+
+                animal_choice_dialog = AnimalChoiceWidget(self.choices)
+                result = animal_choice_dialog.exec_()
+                if result == AnimalChoiceWidget.Accepted:
+                        selected_bank = animal_choice_dialog.selected_animal
+                        if selected_bank:
+                                print(f"Selected bank: {selected_bank}")
+                else:
+                        pass
+
                 self.window = QtWidgets.QMainWindow()
                 self.ui=Ui_MainWindow()
-                self.ui.setupUi(self.window,self.mono,self.pin)
+                self.ui.setupUi(self.window,self.mono,self.pin,selected_bank)
                 self.window.show()
+                self.otp_text.setText("")
+                self.textEdit_2.setText("")
                 self.otp_text.setEnabled(False)
                 self.textEdit_2.setDisabled(False)
         else:
@@ -308,7 +327,7 @@ class Ui_Authentication(object):
                 self.messagebox("Enter valid 10-DIGIT Mobile No.",2)
         else:   
                 establish_connection()
-                self.pin=Read("select pin from customer where ph_no={}".format(self.mono))
+                self.pin=Read("select pin from customer where ph_no={}".format(self.mono))[0][0]
                 if self.pin != 11:
                         self.otp=get_OTP(self.mono)
                         self.flag=1
