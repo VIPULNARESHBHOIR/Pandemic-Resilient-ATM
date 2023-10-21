@@ -1,10 +1,6 @@
 
 import mysql.connector as msc
 
-# !!! IMPORTANT !!!!  
-# < CREATE YOUR OWN DATABASE IN MYSQL HAVING SCHEMA NAME "bank" AND TABLE NAME "customer" >
-# < column cust_id , balance , ph_no,pin 
-
 con = None
 cursor = None
 
@@ -49,11 +45,3 @@ def Read(query):
             return 11
     except Exception as e:
         print(e)
-
-establish_connection()
-value='HDFC'
-no="7057997137"
-establish_connection()
-
-BALANCE = Read("SELECT balance FROM customer WHERE ph_no='{}' AND bank='{}'".format(no, value))
-print(BALANCE)
