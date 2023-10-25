@@ -40,7 +40,7 @@ class Ui_Authentication(QMainWindow):
                                 self.otp_text.setText("")
                                 self.textEdit_2.setText("")
                                 self.otp_text.setEnabled(False)
-                                self.textEdit_2.setDisabled(False)
+                                self.textEdit_2.setEnabled(True)
                 else:
                         pass
                 
@@ -350,7 +350,7 @@ class Ui_Authentication(QMainWindow):
 
         #method to send the OTP
     def Send_OTP(self):
-        self.mono=self.textEdit_2.toPlainText()
+        self.mono=str(self.textEdit_2.toPlainText())
         print(self.mono)
         if len(self.mono)!=10 or self.mono=="":
                 print("Enter valid 10-DIGIT Mobile No.")
@@ -358,7 +358,12 @@ class Ui_Authentication(QMainWindow):
         else:   
                 establish_connection()
                 #we are just checking either account exists for the NUMBER or not(retriving data as pin no or anything)
-                self.pin=Read("select pin from customer where ph_no={}".format(self.mono))[0][0]
+                try:
+                        self.pin=Read("select pin from customer where ph_no='{}'".format(self.mono))[0][0]
+                except:
+                        print("Account not EXISTS!!")
+                        self.messagebox("Account not EXISTS!!",2)
+                print(self.pin)
                 if self.pin != None:
                         self.otp=self.change_otp()
                         get_OTP(self.mono,self.otp)

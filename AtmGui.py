@@ -28,8 +28,11 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         
+        self.win_dow=MainWindow
         self.mob=mob
         self.flag=3     #this flag is use for do nothing
+        self.option=0
+        self.pass_word=""
         self.Bank_name=Bank_name
         self.PIN=decrypt(self.mob,self.Bank_name) #retriving decrypted pin from database
 
@@ -225,7 +228,7 @@ class Ui_MainWindow(object):
         self.inputbox = QtWidgets.QTextBrowser(self.centralwidget)
         self.inputbox.setGeometry(QtCore.QRect(340, 70, 520, 80))
         self.inputbox.setStyleSheet("background-color: qlineargradient(spread:pad, x1:0.124378, y1:0.119, x2:1, y2:1, stop:0.18408 rgba(0, 0, 0, 147), stop:0.850746 rgba(3, 0, 7, 255));\n"
-"font: 28pt \"MV Boli\";\n"
+"font: 30pt \"MV Boli\";\n"
 "color: rgb(85, 255, 38);\n"
 "border:none;\n"
 "border-radius:10px;\n"
@@ -263,31 +266,74 @@ class Ui_MainWindow(object):
         self.exit()
 
     def Zero(self):
-        self.inputbox.setText(self.inputbox.toPlainText()+"0")
+        if self.option==0:
+                self.inputbox.setText(self.inputbox.toPlainText()+"0")
+        if self.option==1:
+                self.pass_word+="0"
+                self.inputbox.setText(self.inputbox.toPlainText()+"*")
     def One(self):
-        self.inputbox.setText(self.inputbox.toPlainText()+"1")
+        if self.option==0:
+                self.inputbox.setText(self.inputbox.toPlainText()+"1")
+        if self.option==1:
+                self.pass_word+="1"
+                self.inputbox.setText(self.inputbox.toPlainText()+"*")
     def Two(self):
-        self.inputbox.setText(self.inputbox.toPlainText()+"2")
+        if self.option==0:
+                self.inputbox.setText(self.inputbox.toPlainText()+"2")
+        if self.option==1:
+                self.pass_word+="2"
+                self.inputbox.setText(self.inputbox.toPlainText()+"*")
     def Three(self):
-        self.inputbox.setText(self.inputbox.toPlainText()+"3")
+        if self.option==0:
+                self.inputbox.setText(self.inputbox.toPlainText()+"3")
+        if self.option==1:
+                self.pass_word+="3"
+                self.inputbox.setText(self.inputbox.toPlainText()+"*")
     def Four(self):
-        self.inputbox.setText(self.inputbox.toPlainText()+"4")
+        if self.option==0:
+                self.inputbox.setText(self.inputbox.toPlainText()+"4")
+        if self.option==1:
+                self.pass_word+="4"
+                self.inputbox.setText(self.inputbox.toPlainText()+"*")
     def Five(self):
-        self.inputbox.setText(self.inputbox.toPlainText()+"5")
+        if self.option==0:
+                self.inputbox.setText(self.inputbox.toPlainText()+"5")
+        if self.option==1:
+                self.pass_word+="5"
+                self.inputbox.setText(self.inputbox.toPlainText()+"*")
     def Six(self):
-        self.inputbox.setText(self.inputbox.toPlainText()+"6")
+        if self.option==0:
+                self.inputbox.setText(self.inputbox.toPlainText()+"6")
+        if self.option==1:
+                self.pass_word+="6"
+                self.inputbox.setText(self.inputbox.toPlainText()+"*")
     def Seven(self):
-        self.inputbox.setText(self.inputbox.toPlainText()+"7")
+        if self.option==0:
+                self.inputbox.setText(self.inputbox.toPlainText()+"7")
+        if self.option==1:
+                self.pass_word+="7"
+                self.inputbox.setText(self.inputbox.toPlainText()+"*")
     def Eight(self):
-        self.inputbox.setText(self.inputbox.toPlainText()+"8")
+        if self.option==0:
+                self.inputbox.setText(self.inputbox.toPlainText()+"8")
+        if self.option==1:
+                self.pass_word+="8"
+                self.inputbox.setText(self.inputbox.toPlainText()+"*")
     def Nine(self):
-        self.inputbox.setText(self.inputbox.toPlainText()+"9")
+        if self.option==0:
+                self.inputbox.setText(self.inputbox.toPlainText()+"9")
+        if self.option==1:
+                self.pass_word+="9"
+                self.inputbox.setText(self.inputbox.toPlainText()+"*")
     
     def CLR(self):
+        if self.option==1:
+                self.pass_word=""
         self.inputbox.setText("")
     def DEL(self):
         self.inputbox.setText(self.inputbox.toPlainText()[:-1])
-
+        if self.option==1:
+                self.pass_word=self.pass_word[:-1]
 
     def Changepin(self):
         self.textbox.setText("\t\tEnter your PIN")
@@ -300,6 +346,7 @@ class Ui_MainWindow(object):
 
     def Withdrawal(self):
         self.flag=0
+        self.option=0
         self.textbox.setText("\t\tEnter The Amount")
         self.Speak("Enter The Amount")
 
@@ -323,11 +370,13 @@ class Ui_MainWindow(object):
                                 self.textbox.setText("\t\tEnter Your PIN")
                                 self.inputbox.setText("")
                                 self.flag=1
+                                self.option=1
                                 self.Speak("Enter Your PIN")
                                 
         if self.flag==1:                                #for pin
                 if self.inputbox.toPlainText()!="":
-                        self.pin=int(self.inputbox.toPlainText())
+                        self.pin=self.pass_word
+                        print(self.pin)
                         self.flag=2
                 
         if self.flag==2: 
@@ -340,13 +389,15 @@ class Ui_MainWindow(object):
                         #self.inputbox.setText("")
                         #self.flag=3
                         #self.textbox.setText("")
-                        MainWindow.hide()
+                        self.closeMain(self.win_dow)
 
                 else:
                         self.Speak("Incorrect PIN")
                         self.messagebox("Incorrect PIN",2)
                         self.inputbox.setText("")
                         self.flag=1
+                        self.pass_word=""
+                        print(self.pass_word)
 
         if self.flag==4:
                 if self.inputbox.toPlainText()!="":
