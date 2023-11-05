@@ -73,8 +73,6 @@ class handDetector():
 
         return fingers
 
-
-    
     def findDistance(self,p1,p2,img,draw=True,r=15,t=3):
         x1, y1=self.lmList[p1][1:]
         x2, y2=self.lmList[p2][1:]
@@ -88,29 +86,5 @@ class handDetector():
         length=math.hypot(x2-x1,y2-y1)
         return length,img,[x1,y1,x2,y2,cx,cy]
         
-
-def main():
-    pTime=0
-    cTime=0
-    cap=cv2.VideoCapture(0)
-    detector=handDetector()
-    while True:
-        success,img=cap.read()
-        img=detector.findHands(img)
-        lmList,bbox=detector.findPosition(img)
-
-        if len(lmList) != 0:
-            print(lmList[4])
-
-        cTime=time.time()
-        fps=1/(cTime-pTime)
-        pTime=cTime
-
-        cv2.putText(img,str(int(fps)),(10,70),cv2.FONT_HERSHEY_PLAIN,3,(255,0,255),3)
-        cv2.imshow("myVideo",img)
-        cv2.waitKey(1)
-
-if __name__=="__main__":
-    main()
 
 

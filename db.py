@@ -4,7 +4,7 @@ import mysql.connector as msc
 con = None
 cursor = None
 
-# Function to establish the database connection
+#establish the database connection
 def establish_connection():
     global con, cursor
     try:
@@ -18,8 +18,7 @@ def establish_connection():
     except Exception as e:
         print(e)
 
-# Define the Update and Read functions 
-
+#Update the database
 def Update(query):
     try:
 
@@ -33,6 +32,7 @@ def Update(query):
     except Exception as e:
         print(e)
 
+#read the required data
 def Read(query):
     try:
         cursor.execute(query) 
