@@ -19,7 +19,7 @@ cap.set(4,hCam)
 detector=htm.handDetector(maxHands=1)
 
 while True:
-    #findind the hand landmarks
+    #finding the hand landmarks
     success,img=cap.read()
     img=detector.findHands(img)
     lmList,bbox=detector.findPosition(img)
