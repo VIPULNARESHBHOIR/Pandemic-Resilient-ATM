@@ -11,8 +11,8 @@ threading
 
 {
 
-In AtmGui.py/
-In Function, proceed()
+In AtmGui2.py/
+In Function:- proceed()
 
 flags are used to indicating and performing task like ,
 if flag=0 - withrawal -->proceed --> flag=1
