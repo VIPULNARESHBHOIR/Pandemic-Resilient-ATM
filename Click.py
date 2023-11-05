@@ -23,17 +23,14 @@ while True:
     success,img=cap.read()
     img=detector.findHands(img)
     lmList,bbox=detector.findPosition(img)
-    #print(lmList)
-
+    
     #get the tip of the index and middle finger
     if len(lmList)!=0:
         x1,y1=lmList[8][1:]
         x2,y2=lmList[12][1:]
-        #print(x1,y1,x2,y2)
 
     #check Up fingers
     fingures=detector.fingersUp()
-    #print(fingures,"\n")
 
     cv2.rectangle(img,(frameR,frameR),(wCam-frameR,hCam-frameR),
     (255,0,255),2)
@@ -63,8 +60,6 @@ while True:
                 cv2.circle(img,(line_info[4],line_info[5]),15,(0,255,0),cv2.FILLED)
                 autopy.mouse.click()
                 time.sleep(0.2)
-                #print(dis)
-
     #framerate
     cTime=time.time()
     fps=1/(cTime-pTime)
