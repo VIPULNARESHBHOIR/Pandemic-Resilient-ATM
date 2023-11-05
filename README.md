@@ -1,1 +1,1 @@
-# Intellisafe-ATM : "Smart Vision Based ATM Transaction Using Computer Vision"
+# Pandemic-Resilient-ATM : "Cardless and Computer Vision based ATM Transaction"
