@@ -25,7 +25,7 @@ def get_OTP(Mo_No):
     try:
         message = client.messages.create(
         to=recipient_phone_number,
-        from_="##########",  # Replace with your Twilio phone number
+        from_="+14##########",  # Replace with your Twilio phone number
         body=message_body
         )
         print(f"OTP sent to {recipient_phone_number}")
