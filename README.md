@@ -16,3 +16,5 @@ intricate motions of an individual's hand. This process serves the dual purpose 
 validation in real-time and the reduction of physical contact, thus not only revolutionizing 
 banking practices but also making substantial contributions to public health measures in the 
 midst of pandemics and beyond
+
+[3rd_MiniProject.pdf](https://github.com/VIPULNARESHBHOIR/Pandemic-Resilient-ATM/files/13281618/3rd_MiniProject.pdf)
