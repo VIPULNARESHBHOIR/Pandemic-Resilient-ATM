@@ -1,0 +1,30 @@
+you need to install all these modules before running the code
+pip install mysql-connector-python
+pip install PyQt5
+pip install pyttsx3
+pip install twilio
+pip install mediapipe
+pip install opencv-python
+pip install autopy
+pip install numpy
+pip install base64
+pip install threading 
+
+=========IMP=========
+You need to create twilio account on twilio framework website where you will get auth id and token which is required in Get_Otp.py
+
+========NOTE============
+In AtmGui2.py/
+In Function:- proceed()
+
+flags are used to indicating and performing task like ,
+if flag=0 - withrawal -->proceed --> flag=1
+flag=1 - pin --> proceed --> flag 2
+flag=2 - verification successful --> flag=3
+flag=3 - do nothing
+flag=4 - enter correct pin ->flag=5
+flag=5 - enter new pin and update -->flag=3
+
+this helps us very well to take the values from-
+only one TEXTBOX for various type of task.
+
