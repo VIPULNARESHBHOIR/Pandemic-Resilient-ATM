@@ -2,7 +2,7 @@
 
 ## 3rd Year Mini-Project SEM-5
 
-# Abstract:
+### Abstract:
 In recent years, Significant advancements in Science and Technology have paved the way for 
 the emergence of hand gesture recognition technology and its diverse applications. This 
 innovative technology has rapidly established itself as a powerful asset in the ongoing battle 
