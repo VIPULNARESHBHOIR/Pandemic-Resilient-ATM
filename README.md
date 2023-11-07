@@ -1,1 +1,1 @@
-# Pandemic-Resilient-ATM : "Cardless and Computer Vision based ATM Transaction"
+# Pandemic-Resilient-ATM : "Enabling Touchless and Cardless Transaction using Computer Vision"
