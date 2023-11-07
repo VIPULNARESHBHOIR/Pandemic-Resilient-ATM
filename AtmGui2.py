@@ -501,7 +501,7 @@ class Ui_MainWindow(object):
                         self.flag=1
                         self.pass_word=""
                         print(self.pass_word)
-
+        # Change pin
         if self.flag==4:
                 if self.inputbox.toPlainText()!="":
                         self.pin=int(self.inputbox.toPlainText())

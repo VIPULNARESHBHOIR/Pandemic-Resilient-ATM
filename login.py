@@ -10,14 +10,14 @@ from PyQt5.QtCore import *
 
 import random
 import threading
-import Hand_trace as htm
+import Hand_trace as ht
 import cv2
 import numpy as np
 import time
 import autopy
 
-cap=cv2.VideoCapture(0)
-detector=htm.handDetector(maxHands=1)
+cap = cv2.VideoCapture(0)
+detector = ht.HandDetector(max_hands=1)
 
 class Ui_Authentication(QMainWindow):
 #open the ATM window after Successful Authentication
@@ -51,6 +51,7 @@ class Ui_Authentication(QMainWindow):
                                 self.textEdit_2.setText("")
                                 self.otp_text.setEnabled(False)
                                 self.textEdit_2.setEnabled(True)
+                                self.flag=0
                 else:
                         pass
                 
@@ -592,61 +593,61 @@ class Worker1(QThread):
     ImageUpdate = pyqtSignal(QImage)
     def run(self):
         self.ThreadActive = True
-        wCam,hCam = 640,480
-        wScr,hScr= autopy.screen.size() 
-        frameR=100                      
-        smoothening=5
+        width_camera, height_camera = 640, 480
+        width_screen, height_screen = autopy.screen.size()  # Screen size
+        frame_reduction = 100  # Frame reduction
+        smoothening = 5
 
-        pTime=0
-        plocX,plocY=0,0
-        clocX,clocY=0,0
+        previous_time = 0
+        previous_location_x, previous_location_y = 0, 0
+        current_location_x, current_location_y = 0, 0
 
-        cap.set(3,wCam)
-        cap.set(4,hCam)
+        cap.set(3, width_camera)
+        cap.set(4, height_camera)
 
         while self.ThreadActive:
-            success, img = cap.read()
+            success, image = cap.read()
             if success:
-                #finding the hand landmarks
-                img=detector.findHands(img)
-                lmList,bbox=detector.findPosition(img)
+                # Finding the hand landmarks
+                image = detector.find_hands(image)
+                landmark_list, bounding_box = detector.find_hand_position(image)
 
-                #get the tip of the index and middle finger
-                if len(lmList)!=0:
-                    x1,y1=lmList[8][1:]
-                    x2,y2=lmList[12][1:]
+                # Get the tip of the index and middle finger
+                if len(landmark_list) != 0:
+                        x1, y1 = landmark_list[8][1:]
+                        x2, y2 = landmark_list[12][1:]
 
-                #check Up fingers
-                fingures=detector.fingersUp()
+                # Check up fingers
+                fingers = detector.fingers_up()
 
-                if len(fingures)!=0:
-                    #only index fingure in moving position
-                    if fingures[1]==1 and fingures[2]==0:
-                        #converting coordinates for perfect movment of hands
-                        x3=np.interp(x1,(0,wCam),(0,wScr))
-                        y3=np.interp(y1,(0,hCam),(0,hScr))
+                if len(fingers) != 0:
+                        # Only index finger in moving position
+                        if fingers[1] == 1 and fingers[2] == 0:
+                                # Converting coordinates for perfect movement of hands
+                                x3 = np.interp(x1, (0, width_camera), (0, width_screen))
+                                y3 = np.interp(y1, (0, height_camera), (0, height_screen))
 
-                        #setting to mmouse curser properly over the screen (smothening)
-                        clocX=plocX+(x3-plocX)/smoothening
-                        clocY=plocY+(y3-plocY)/smoothening
-                        #movment of mouse over the screen
-                        autopy.mouse.move(wScr-clocX,clocY)
-                        cv2.circle(img,(x1,y1),15,(255,0,255),cv2.FILLED)
-                        
-                        plocX,plocY=clocX,clocY
-                    
-                    #when index and middle fingure are up then click
-                    if fingures[1]==1 and fingures[2]==1:
-                        #find distance between fingures
-                        dis,img,line_info=detector.findDistance(8,12,img)
-                        
+                                # Setting to mouse cursor properly over the screen (smoothening)
+                                current_location_x = previous_location_x + (x3 - previous_location_x) / smoothening
+                                current_location_y = previous_location_y + (y3 - previous_location_y) / smoothening
+                                # Movement of mouse over the screen
+                                autopy.mouse.move(width_screen - current_location_x, current_location_y)
+                                cv2.circle(image, (x1, y1), 15, (255, 0, 255), cv2.FILLED)
 
-                        if dis<20:
-                            cv2.circle(img,(line_info[4],line_info[5]),15,(0,255,0),cv2.FILLED)
-                            autopy.mouse.click()
-                            time.sleep(0.2)
+                                previous_location_x, previous_location_y = current_location_x, current_location_y
 
-                Image = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+                        # When index and middle finger are up then click
+                        if fingers[1] == 1 and fingers[2] == 1:
+                                # Find distance between fingers
+                                distance, image, line_info = detector.find_distance(8, 12, image)
+
+                                if distance < 20:
+                                        cv2.circle(image, (line_info[4], line_info[5]), 15, (0, 255, 0), cv2.FILLED)
+                                        autopy.mouse.click()
+                                        time.sleep(0.2)
+
+
+                Image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
                 FlippedImage = cv2.flip(Image, 1)
                 ConvertToQtFormat = QImage(FlippedImage.data, FlippedImage.shape[1], FlippedImage.shape[0], QImage.Format_RGB888)
                 Pic = ConvertToQtFormat.scaled(250, 250, Qt.KeepAspectRatio)
