@@ -1,4 +1,4 @@
-you need to install all these modules before running the code
+you need to install all these modules before running the code;
 pip install mysql-connector-python
 pip install PyQt5
 pip install pyttsx3
@@ -9,6 +9,8 @@ pip install autopy
 pip install numpy
 pip install base64
 pip install threading 
+
+login.py is the main.py
 
 =========IMP=========
 You need to create twilio account on twilio framework website where you will get auth id and token which is required in Get_Otp.py
