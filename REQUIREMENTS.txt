@@ -1,4 +1,6 @@
-you need to install all these modules before running the code;
+PYTHON VERSION 3.8.10 ONLY
+
+you need to install all these modules before running the code....
 pip install mysql-connector-python
 pip install PyQt5
 pip install pyttsx3
