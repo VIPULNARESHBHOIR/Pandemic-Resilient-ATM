@@ -1,7 +1,7 @@
 # Pandemic-Resilient-ATM : "Enabling Touchless and Cardless Transaction using Computer Vision"
+[@Copyright](https://drive.google.com/file/d/11t1cQUSUww99DmKxAYX2Zy8ihXuxaCRM/view?usp=drive_link)
 
 ## 3rd Year Mini-Project SEM-5
-
 ### Abstract:
 In recent years, Significant advancements in Science and Technology have paved the way for 
 the emergence of hand gesture recognition technology and its diverse applications. This 
