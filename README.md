@@ -1,5 +1,9 @@
 # Pandemic-Resilient-ATM : "Enabling Touchless and Cardless Transaction using Computer Vision"
+[@Project Video](https://drive.google.com/file/d/1pf2Mbo8-Vdm8rGHcuZu3y6vm_yQ-xyuB/view?usp=drive_link)
 [@Copyright](https://drive.google.com/file/d/11t1cQUSUww99DmKxAYX2Zy8ihXuxaCRM/view?usp=drive_link)
+
+![Screenshot 2025-01-11 122941](https://github.com/user-attachments/assets/e9d8a85c-2c77-4975-b2e6-3600954f33e8)
+![Screenshot 2025-01-11 122905](https://github.com/user-attachments/assets/60bab9a8-8efd-470a-92d4-a6fc9f4f7043)
 
 ## 3rd Year Mini-Project SEM-5
 ### Abstract:
